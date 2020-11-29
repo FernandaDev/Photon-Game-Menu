@@ -4,8 +4,18 @@ using Photon.Realtime;
 
 public class ServerLauncher : MonoBehaviourPunCallbacks
 {
+    public static ServerLauncher Instance { get; private set; }
+
     public string Nickname => PhotonNetwork.NickName;
     public bool IsMaster => PhotonNetwork.IsMasterClient;
+
+    private void Awake()
+    {
+        if (!Instance)
+            Instance = this;
+        else
+            Destroy(gameObject);
+    }
 
     #region Connection
 
@@ -30,11 +40,6 @@ public class ServerLauncher : MonoBehaviourPunCallbacks
 
     #region Room
 
-    public virtual void OnNicknameChange(string newNickname)
-    {
-        PhotonNetwork.NickName = newNickname;
-    }
-
     public virtual void JoinRoom(RoomInfo info)
     {
         PhotonNetwork.JoinRoom(info.Name);
@@ -50,6 +55,9 @@ public class ServerLauncher : MonoBehaviourPunCallbacks
         Debug.Log("Left the room");
         PhotonNetwork.LeaveRoom();
     }
+
+    public void SetPlayerNickname(string nickname) => PhotonNetwork.NickName = nickname;
+
 
     #endregion
 }

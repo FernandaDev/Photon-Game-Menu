@@ -7,6 +7,7 @@ public class MainMenu : ServerLauncher
 {
     [SerializeField] TMP_Text currentRoomNameText;
     [SerializeField] Transform startGameButton;
+    [SerializeField] Transform gameNameText;
     [SerializeField] Transform loadingText;
     [SerializeField] Transform panelsTransform;
     
@@ -24,15 +25,11 @@ public class MainMenu : ServerLauncher
     }
 
     void ShowPanel(PanelName panelToShow, bool shouldShow) => panels[panelToShow].TooglePanel(shouldShow);
-
-    public override void ConnectToMaster()
-    {
-        base.ConnectToMaster();
-    }
     
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to master.");
+        gameNameText.gameObject.SetActive(false);
         loadingText.gameObject.SetActive(false);
         ShowPanel(PanelName.Menu, true);
     }
@@ -85,13 +82,5 @@ public class MainMenu : ServerLauncher
         ShowPanel(PanelName.RoomCreationFailed, true);
     }
 
-    public override void OnNicknameChange(string newNickname)
-    {
-        base.OnNicknameChange(newNickname);
-    }
-
-    public void OnRoomNameChange(string roomName)
-    {
-        currentRoomName = roomName;
-    }
+    public void OnRoomNameChange(string roomName) => currentRoomName = roomName;
 }
